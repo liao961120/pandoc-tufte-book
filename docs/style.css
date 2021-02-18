@@ -257,6 +257,7 @@ label.margin-toggle:not(.sidenote-number) { display: none; }
     div.table-wrapper, table { width: 85%; }
     img { width: 100%; } 
 }
+
 /* 
  * Stylesheet for environments created by numenvs.py filter.
  */ 
@@ -347,6 +348,7 @@ label.margin-toggle:not(.sidenote-number) { display: none; }
 .numenv .title {
   border: none;
 }
+
 /*
  * Stylesheet controlling the behavior and look of the collapsible side panel.
  */
@@ -408,6 +410,7 @@ label.margin-toggle:not(.sidenote-number) { display: none; }
 #collapsiblemenu ul > li > ul {
   display:none;
 }
+
 /*
  * Stylesheet controlling the look of the front page at index.html
  */
@@ -498,4 +501,12 @@ a:hover {
     padding-top:0px;
     font-size:1.65rem;
   }
+}
+
+section > p {
+	text-align: justify;
+}
+
+body {
+	background-color: rgb(255, 238, 216);
 }

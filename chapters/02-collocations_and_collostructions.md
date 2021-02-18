@@ -1,9 +1,7 @@
 ---
-chapter-number: 1
 title: 語料中的搭配現象
 link-citations: true
 author: 廖永賦、石晴方
-reference-section-title: References
 ---
 
 
