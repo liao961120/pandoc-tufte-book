@@ -411,6 +411,13 @@ label.margin-toggle:not(.sidenote-number) { display: none; }
   display:none;
 }
 
+section > p {
+	text-align: justify;
+}
+
+body {
+	background-color: #fffff8;
+}
 /*
  * Stylesheet controlling the look of the front page at index.html
  */
@@ -503,10 +510,3 @@ a:hover {
   }
 }
 
-section > p {
-	text-align: justify;
-}
-
-body {
-	background-color: rgb(255, 238, 216);
-}
