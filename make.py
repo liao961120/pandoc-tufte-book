@@ -190,3 +190,7 @@ def extract_title(fp):
     with open(fp, encoding="utf-8") as f:
         html = BeautifulSoup(f.read(), 'html.parser')
     return html.title.string
+
+
+if __name__ == "__main__":
+    make_html()
