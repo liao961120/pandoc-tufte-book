@@ -5,3 +5,4 @@ pandoc-tablenos
 pandoc-secnos
 pandoc-shortcaption
 bs4
+pyyaml

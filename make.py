@@ -1,5 +1,6 @@
 #%%
 import os
+import yaml
 import shutil
 import pathlib
 import subprocess
@@ -17,7 +18,7 @@ PUBLISH = pathlib.Path('docs/')
 PANDOC_DIR = pathlib.Path('pandoc/')
 
 #------- Auto-generated --------#
-INDEXMD = SOURCE_DIR / "index.md"
+INDEXMD = SOURCE_DIR / "index.md"  # index.yml
 PUBLISH.mkdir(exist_ok=True)
 PANDOC_DIR.mkdir(exist_ok=True)
 TEMPLATE_DIR = HTML / 'templates/'
@@ -113,7 +114,6 @@ def make_chapters():
 def make_index():
     if not INDEXMD.exists():
         logging.warning(f"No index file found at {INDEXMD}")
-        return
     
     tempf = make_index_md()
 
@@ -134,15 +134,29 @@ def make_index():
     cmd = [x.strip() for x in cmd.strip().split('\n')]
     status = os.system(' '.join(cmd))
     if status != 0:
-        print(f"[WARNING] Failed to make {fp} to {tgt}")
+        print(f"[WARNING] Failed to make {tempf} to {PUBLISH / 'index.html'}")
     
     os.remove(tempf)
     return status
 
 
 def make_index_md():
-    with open(INDEXMD, encoding="utf-8") as f:
-        md_src = f.read() + '\n\n'
+    if INDEXMD.exists():
+        if INDEXMD.suffix == '.md':
+            with open(INDEXMD, encoding="utf-8") as f:
+                    md_src = f.read() + '\n\n'
+        elif INDEXMD.suffix == '.yaml' or INDEXMD.suffix == '.yml':
+            md_src = load_yml(INDEXMD)
+
+    else:
+        md_src = """
+        --- 
+        title: BOOK TITLE
+        subtitle: BOOK SUBTITLE
+        author: AUTHOR
+        ---
+        """.strip()
+        md_src = '\n'.join(l.strip() for l in md_src.split('\n'))
 
     htmls = sorted(x for x in PUBLISH.glob("*.html") \
         if x.name != "index.html" and 'reference' not in x.stem.lower())
@@ -164,6 +178,32 @@ def make_index_md():
 
 
 #------------ Utils ------------#
+def load_yml(fp):
+    with open(fp, encoding="utf-8") as f:
+        start = False
+        raw = []
+        for line in f:
+            line = line.strip()
+            if line == '': continue
+            if line == '---': 
+                if not start: 
+                    start = True
+                    continue
+                else: break
+            raw.append(line)
+        raw = '\n'.join(raw)
+         
+    index_yml = yaml.safe_load(raw)
+    md_src = {}
+    keys = {'title', 'subtitle', 'author'}
+    for k in index_yml:
+        if k in keys:
+            md_src[k] = index_yml[k]
+    md_src = '---\n' + yaml.dump(md_src) + '---\n'
+
+    return md_src
+
+
 def copytree(src, dst, symlinks=False, ignore=None):
     """Recursively copy source directory into target directory
     """
@@ -194,3 +234,4 @@ def extract_title(fp):
 
 if __name__ == "__main__":
     make_html()
+# %%
